@@ -1,0 +1,42 @@
+version: "3"
+    
+services:
+    
+    mysql:
+        image: mysql:5.6
+        container_name: mysql
+        networks:
+            - wpnet
+        volumes:
+            - sql-data:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: root123
+            MYSQL_DATABASE: wordpress
+            MYSQL_USER: wp_user
+            MYSQL_PASSWORD: user123   
+        restart: always
+    
+    wordpress:
+        
+        image: wordpress:latest
+        container_name: wordpress
+        networks:
+            - wpnet
+        volumes:
+            - wp-data:/var/www/html
+        ports:
+            - "80:80"
+        restart: always
+        environment:
+            
+            WORDPRESS_DB_HOST: mysql 
+            WORDPRESS_DB_USER: wp_user 
+            WORDPRESS_DB_PASSWORD: user123 
+            WORDPRESS_DB_NAME: wordpress 
+        
+networks:
+    wpnet:
+        
+volumes:
+    wp-data:
+    sql-data:
